@@ -10,6 +10,23 @@ from random import randrange
 from tkinter import Canvas, Tk, messagebox, font
 #only importing the modules that we are going to use
 
+#CREATE THE EGGS
+def create_egg():
+    x = randrange(10,740) #pick a random position along the top of the canvas for the new egg
+    y = 40
+    new_egg = c.create_oval(x,y,x+egg_width,y+egg_height,fill=next(color_cycle), width=0)
+    eggs.append(new_egg)
+    root.after(egg_interval, create_egg()) #when to call the create_egg function calls itself within itself
+
+#MOVE THE EGGS
+def move_eggs():
+    #loop through all of the eggs and move them
+    for egg in eggs:
+
+
+
+
+
 
 #INITIAL SETUP AND BACKGROUND DRAWING
 canvas_width = 800
@@ -28,6 +45,7 @@ egg_score = 10 #score 10 points for catching an egg
 egg_speed = 500
 egg_interval = 4000 #a new egg appears every 4 seconds
 difficulty_factor = 0.95 #after every catch, the speed increases
+eggs = [] #keep track of the eggs when creating them in function
 
 #SETUP THE CATCHER
 catcher_color = 'blue'
@@ -49,7 +67,8 @@ score_text = c.create_text(10,10,anchor='nw',font=game_font,fill='darkblue', tex
 lives_remaining = 3
 lives_text = c.create_text(canvas_width-10,10,anchor='ne',font=game_font, fill='darkblue', text='Lives {}'.format(lives_remaining))
 
-#CREATE THE EGGS
+
+
 
 c.mainloop()
 
