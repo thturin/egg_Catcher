@@ -61,6 +61,7 @@ def check_catch():
 
 def increase_score(points):
     global score, egg_speed, egg_interval
+    beep.play()
     score += points
     egg_speed = int(egg_speed*difficulty_factor)
     c.itemconfig(score_text, text='Score: {}'.format(score))
@@ -119,6 +120,8 @@ score_text = c.create_text(10,10,anchor='nw',font=game_font,fill='darkblue', tex
 lives_remaining = 3
 lives_text = c.create_text(canvas_width-10,canvas_height-30,anchor='ne',font=game_font, fill='darkblue', text='Lives :'+ str(lives_remaining))
 
+mixer.init()
+beep = mixer.Sound("sound/one.wav")
 
 c.bind('<Left>', move_left)
 c.bind('<Right>', move_right)
@@ -127,10 +130,7 @@ root.after(1000, create_egg)
 root.after(1000, move_eggs)
 root.after(1000, check_catch)
 
-mixer.init()
-beep = mixer.Sound("beep.wav")
-beep.play()
-time.sleep(5)
+
 
 
 
