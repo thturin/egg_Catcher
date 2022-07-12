@@ -22,9 +22,8 @@ def create_egg():
 def move_eggs():
     #loop through all of the eggs and move them
     for egg in eggs:
-        (egg_x,egg_y,egg_x2, egg_x2) = c.coords(egg) #c.coords(object) ->[x1,y1,x2,y2]
+        (egg_x,egg_y,egg_x2, egg_y2) = c.coords(egg) #c.coords(object) ->[x1,y1,x2,y2]
         c.move(egg,0,10) #egg moves down 10 pixels
-        print('hi')
         if egg_y2 > canvas_height:
             egg_dropped(egg)
     root.after(egg_speed, move_eggs) #after the egg moves for a certain amount of time, call the function again RECURSION S
@@ -50,6 +49,7 @@ def check_catch():
             (egg_x,egg_y,egg_x2,egg_y2) = c.coords(egg)
             if catcher_x <egg_x and catcher_x2 > egg_x2 and catcher_y2-egg_y2 <40:
                 eggs.remove(egg)
+                c.delete(egg)
                 increase_score(egg_score) #increase score by 10 points
     root.after(100,check_catch) #call function within function
 
@@ -111,7 +111,7 @@ game_font.config(size=18)
 score = 0
 score_text = c.create_text(10,10,anchor='nw',font=game_font,fill='darkblue', text='Score: {}'.format(score))
 lives_remaining = 3
-#lives_text = c.create_text(canvas_width=10,canvas_height=10,anchor='ne',font=game_font, fill='darkblue', text='Lives :'+ str(lives_remaining))
+lives_text = c.create_text(canvas_width-10,canvas_height-30,anchor='ne',font=game_font, fill='darkblue', text='Lives :'+ str(lives_remaining))
 
 
 c.bind('<Left>', move_left)
