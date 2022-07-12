@@ -16,15 +16,21 @@ def create_egg():
     y = 40
     new_egg = c.create_oval(x,y,x+egg_width,y+egg_height,fill=next(color_cycle), width=0)
     eggs.append(new_egg)
-    root.after(egg_interval, create_egg()) #when to call the create_egg function calls itself within itself
+    root.after(egg_interval, create_egg) #when to call the create_egg function calls itself within itself
 
 #MOVE THE EGGS
 def move_eggs():
     #loop through all of the eggs and move them
     for egg in eggs:
+        (egg_x,egg_y,egg_x2, egg_x2) = c.coords(egg) #c.coords(object) ->[x1,y1,x2,y2]
+        c.move(egg,10) #egg moves down 10 pixels
+        if egg_y2 > canvas_height:
+            egg_dropped(egg)
+    root.after(egg_speed, move_eggs) #after the egg moves for a certain amount of time, call the function again RECURSION S
 
 
-
+def egg_dropped(egg):
+    pass
 
 
 
@@ -65,7 +71,7 @@ game_font.config(size=18)
 score = 0
 score_text = c.create_text(10,10,anchor='nw',font=game_font,fill='darkblue', text='Score: {}'.format(score))
 lives_remaining = 3
-lives_text = c.create_text(canvas_width-10,10,anchor='ne',font=game_font, fill='darkblue', text='Lives {}'.format(lives_remaining))
+lives_text = c.create_text(canvas_width=10,canvas_height=10,anchor='ne',font=game_font, fill='darkblue', text='Lives {}'.format(lives_remaining))
 
 
 
