@@ -23,14 +23,54 @@ def move_eggs():
     #loop through all of the eggs and move them
     for egg in eggs:
         (egg_x,egg_y,egg_x2, egg_x2) = c.coords(egg) #c.coords(object) ->[x1,y1,x2,y2]
-        c.move(egg,10) #egg moves down 10 pixels
+        c.move(egg,0,10) #egg moves down 10 pixels
+        print('hi')
         if egg_y2 > canvas_height:
             egg_dropped(egg)
     root.after(egg_speed, move_eggs) #after the egg moves for a certain amount of time, call the function again RECURSION S
 
 
 def egg_dropped(egg):
-    pass
+    eggs.remove(egg) #remove the egg from the list
+    c.delete(egg) #egg is deleted from the canvas
+    lose_a_life() #function
+    if lives_remaining == 0:
+        messagebox.showinfo('Game Over!','Final Score: {}'.format(score))
+
+def lose_a_life():
+    global lives_remaining #this variable needs to be global since the function is modifying it
+    lives_remaining -= 1
+    c.itemconfig(lives_text,text='Lives: {}'.format(lives_remaining))
+
+def check_catch():
+    #loop through all of the eggs and compare the coordinates
+    for egg in eggs:
+        (catcher_x,catcher_y,catcher_x2,catcher_y2) = c.coords(catcher)
+        for egg in eggs:
+            (egg_x,egg_y,egg_x2,egg_y2) = c.coords(egg)
+            if catcher_x <egg_x and catcher_x2 > egg_x2 and catcher_y2-egg_y2 <40:
+                eggs.remove(egg)
+                increase_score(egg_score) #increase score by 10 points
+    root.after(100,check_catch) #call function within function
+
+def increase_score(points):
+    global score, egg_speed, egg_interval
+    score += points
+    egg_speed = int(egg_speed*difficulty_factor)
+    c.itemconfig(score_text, text='Score: {}'.format(score))
+
+#SETUP THE CONTROLS
+def move_left(event):
+    (x1,y1,x2,y2) = c.coords(catcher)
+    if x1 > 0:
+        c.move(catcher, -20, 0)
+
+def move_right(event):
+    (x1,y1,x2,y2) = c.coords(catcher)
+    if x2<canvas_width:
+        c.move(catcher, 20, 0)
+
+
 
 
 
@@ -71,10 +111,14 @@ game_font.config(size=18)
 score = 0
 score_text = c.create_text(10,10,anchor='nw',font=game_font,fill='darkblue', text='Score: {}'.format(score))
 lives_remaining = 3
-lives_text = c.create_text(canvas_width=10,canvas_height=10,anchor='ne',font=game_font, fill='darkblue', text='Lives {}'.format(lives_remaining))
+#lives_text = c.create_text(canvas_width=10,canvas_height=10,anchor='ne',font=game_font, fill='darkblue', text='Lives :'+ str(lives_remaining))
 
 
-
-
+c.bind('<Left>', move_left)
+c.bind('<Right>', move_right)
+c.focus_set()
+root.after(1000, create_egg)
+root.after(1000, move_eggs)
+root.after(1000, check_catch)
 c.mainloop()
 
